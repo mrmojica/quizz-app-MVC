@@ -48,20 +48,67 @@ Create function that updates scores.
     ];
 
 // content of a Question
-function Question(question, choices, correctAnswer) {
-	this.answer = $('input').val();;
-	this.choices = choices;
-	this.correctAnswer = correctAnswer;
+// function Question(question, choices, correctAnswer) {
+// 	this.question = question;
+// 	this.choices = choices;
+// 	this.correctAnswer = correctAnswer;
+// }
+// //what are the responsabilities of a Question ? : 
+// Question.prototype.checkAnswer = function(userChoice){
+//     //here we are comparing index vs index 
+//     return userChoice == this.correctAnswer;
+// };
+
+
+function Quiz(){
+    this.counter = 0;
+    this.numberCorrect = 0;
+    this.questions = questionList; // tempoary[], and a moethod to add questions...
 }
-//what are the responsabilities of a Question ? : 
 
+//we need a method to iterate over all the current Question choices 
+Quiz.prototype.getQuestion = function(){
+    return this.questions[this.counter];
+        //console.log(questionGroup[0].question);
+    // for (var i= 0; i < questionList.length; i++) {
 
-//Creating a Quiz object 
-var questions =[];
-//what are the responsabilities of a Quiz? resposabilities = methods of Quiz
+    // }
+};
+Quiz.prototype.nextQuestion = function(){
+    this.counter++;
+    console.log('this is the counter: ' + this.counter);
+};
+var correctCounter = 0;
 
-var questionTest = new Question(questionList[0][0],questionList[0][1], questionList[0][2]);
+Quiz.prototype.checkAnswer = function(userChoice){
+    console.log(correctCounter);
+    if(userChoice == this.questions[this.counter].correctAnswer){
+        correctCounter++;
+        console.log(correctCounter);
+    }
+};
 
-questionTest.addQuestion(questionList);
+//View *********
+//add get user choice method
 
+// Quiz.prototype.correctCounter = function(userChoice){
+//     if(Quiz.prototype.checkAnswer(userChoice)){
+//         return correctCounter++;
+//     }
+// };
+// Quiz.prototype.displayAnswers = function(questionGroup){
+//     for(var i = 0; i > questionGroup[0][1].length; i++){
+//         console.log(questionGroup[0[1][i]]);
+//     }
+// };
 
+var testQuiz = new Quiz(); 
+console.log(testQuiz.getQuestion());
+testQuiz.nextQuestion();
+console.log(testQuiz.getQuestion());
+console.log(testQuiz.checkAnswer(1));
+// console.log(testQuiz.correctCounter(1));
+// console.log(correctCounter);
+//testQuiz.displayQuestions(questionList);
+//console.log(questionList[0].question);
+//testQuiz.displayAnswers(questionList);
