@@ -102,11 +102,13 @@ Quiz.prototype.checkAnswer = function(userChoice){
         this.numberCorrectAnswer++;
         console.log('userChoice = ' + userChoice + " vs correct answer: " + this.questions[this.counter].correctAnswer);
         console.log('# of correct questions: ' + this.numberCorrectAnswer);
+        return this.numberCorrectAnswer;
     }else{
         console.log('userChoice = wrong answer');
         console.log('userChoice = ' + userChoice + " vs correct answer: " + this.questions[this.counter].correctAnswer);
         console.log('# of correct questions: ' + this.numberCorrectAnswer);
     }
+
 };
 
 /*
@@ -134,44 +136,68 @@ title showing results
 //*************************View **************************
 
 //the parameter will allow us to select where we want to display the data.
-function View(elementSelector, answerSelector) {
+function View(elementSelector, answerSelector, scoreSelector, counterSelector) {
     this.element = $(elementSelector);
     this.answer = $(answerSelector);
-    // this.answer.on('.user-option', this.function.bind(this)
+    this.score = $(scoreSelector);
+    this.counter = $(counterSelector);
 
     
 
 
 }
 
-View.prototype.nextQuestion
+// var myState = {
+//    question: 'something',
+//    answers= [1,23,4]
+// }
+//Render displays data where it needs to go
+View.prototype.renderAll = function(question, choices, numberCorrectAnswer, counter){
+     //fix duplicating answers/questiontetx bug
+    this.element.empty();
+    this.answer.empty();
 
-View.prototype.displayQuestion = function(testQuestion) {
-    this.element.append('<li>' + testQuestion + '</li>');
-    // <li><input class="user-option" type="radio" name="option" value=' + i + '><label>' + questionList[currentQuestionIndex]["choices"][i] + '</label></li>
+    // update question text
+    this.element.append('<li>' + question + '</li>');
 
-};
-
-View.prototype.displayUserChoices = function(myArray){
-    //we are grabing the selector value because we had issues appending to this.answer
+    // update user choices
     var displayArea = this.answer;
-    myArray.forEach(function(value, index){
+    choices.forEach(function(value, index){
         displayArea.append('<li><input class="user-option" type="radio" name="option" value=' + index + '><label>' + value + '</label></li>');
     });
+
+    // update the score
+    this.score.html(numberCorrectAnswer);
+    // update the counter
+
+   
 };
+
+// View.prototype.displayQuestion = function(testQuestion) {
+//     this.element.append('<li>' + testQuestion + '</li>');
+//     // <li><input class="user-option" type="radio" name="option" value=' + i + '><label>' + questionList[currentQuestionIndex]["choices"][i] + '</label></li>
+
+// };
+
+// View.prototype.displayUserChoices = function(myArray){
+//     //we are grabing the selector value because we had issues appending to this.answer
+//     var displayArea = this.answer;
+//     myArray.forEach(function(value, index){
+//         displayArea.append('<li><input class="user-option" type="radio" name="option" value=' + index + '><label>' + value + '</label></li>');
+//     });
+// };
 
 
 
 //*************************Controller**********************
 
-function Controller(model, view) {
+function Controller(model, view, userChoice) {
     this.model = model;
     this.view = view;
     //connecting the view display method to the model getQuestion method.
-    this.view.displayQuestion(this.model.getQuestion());
-    this.view.displayUserChoices(this.model.getChoices());
-
-
+    // this.view.displayQuestion(this.model.getQuestion());
+    // this.view.displayUserChoices(this.model.getChoices());
+this.view.renderAll(this.model.getQuestion(),this.model.getChoices(),this.model.checkAnswer(userChoice));
     // view.question = model.getQuestion.bind(testQuiz);
 }
 
@@ -182,8 +208,8 @@ $(document).ready(function(){
 
 
 var testQuiz = new Quiz(); 
-var testView = new View('.question', '.answers');
-var controller = new Controller(testQuiz, testView);
+var testView = new View('.question', '.answers', '.score', '.question-current');
+var controller = new Controller(testQuiz, testView, 2);
 
 
 //add get user choice method
@@ -197,13 +223,17 @@ var controller = new Controller(testQuiz, testView);
 // };
 
 
-console.log(testQuiz.getQuestion());
-console.log(testQuiz.getChoices());
-testQuiz.getQuestion();
-testQuiz.nextQuestion();
 // console.log(testQuiz.getQuestion());
-console.log(testQuiz.checkAnswer(2));
-testQuiz.checkAnswer(3);
+// console.log(testQuiz.getChoices());
+// testQuiz.getQuestion();
+// testQuiz.nextQuestion();
+// // console.log(testQuiz.getQuestion());
+// console.log(testQuiz.checkAnswer(2));
+// testQuiz.checkAnswer(3);
+
+// testView.renderAll('my q2', [10,100,12,13]);
+// testView.renderAll('my q3', [23,100,12,13]);
+
 
 // testView.displayQuestion(testQuiz);
 // console.log(testQuiz.correctCounter(1));
