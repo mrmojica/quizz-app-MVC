@@ -17,31 +17,31 @@ Create function that updates scores.
  var questionList = [
 
         {
-            question: 'An object falls out of an airplane, and falls freely downward. Its...',
+            question: '1. An object falls out of an airplane, and falls freely downward. Its...',
             choices: ['mass increases', 'acceleration increases', 'velocity increases', 'gravity increases'],
             correctAnswer: 2
         },
 
         {
-            question: 'You brake suddenly. The passengers in your car lurch forward. This demonstrates...',
+            question: '2. You brake suddenly. The passengers in your car lurch forward. This demonstrates...',
             choices: ['gravity', 'weight', 'mass', 'inertia'],
             correctAnswer: 3
         },
 
         {
-            question: 'A truck is travelling at 10 m/s. A package drops off the truck. Neglecting air resistance, as the package hits the ground, its horizontal speed is',
+            question: '3. A truck is travelling at 10 m/s. A package drops off the truck. Neglecting air resistance, as the package hits the ground, its horizontal speed is',
             choices: ['0 m/s', '10 m/s', '20 m/s', 'depends on the weight of the package'],
             correctAnswer: 1
         },
 
         {
-            question: 'A truck is decelerating. A package is dropped from the midpoint of the ceiling of the truck\'s storage compartment. The package hits the floor',
+            question: '4. A truck is decelerating. A package is dropped from the midpoint of the ceiling of the truck\'s storage compartment. The package hits the floor',
             choices: ['immediately beneath the midpoint of the ceiling', 'closer to the back of the truck than the midpoint', 'closer to the front of the truck than the midpoint', 'all of the above'],
             correctAnswer: 2
         },
 
         {
-            question: 'You tie a rock to a string and whirl it in a horizontal circle. The string breaks. In the absence of gravity, the rock',
+            question: '5. You tie a rock to a string and whirl it in a horizontal circle. The string breaks. In the absence of gravity, the rock',
             choices: ['travels in a circle', 'falls in a straight line down to the earth', 'flies in a straight line vertically up into the air', 'travels in a straight line horizontally away from you'],
             correctAnswer: 3
         }
@@ -59,42 +59,118 @@ Create function that updates scores.
 //     return userChoice == this.correctAnswer;
 // };
 
-
+//Constructor Quiz that contains the initial state of the data.
 function Quiz(){
     this.counter = 0;
-    this.numberCorrect = 0;
+    this.numberCorrectAnswer = 0;
     this.questions = questionList; // tempoary[], and a moethod to add questions...
 }
 
-//we need a method to iterate over all the current Question choices 
+//Created a method that provides (get) the question.
 Quiz.prototype.getQuestion = function(){
-    return this.questions[this.counter];
-        //console.log(questionGroup[0].question);
-    // for (var i= 0; i < questionList.length; i++) {
-
-    // }
+    //console.log("getQuestion returns this: " + this.questions[this.counter].question);
+    return this.questions[this.counter].question;
 };
+
+//this method allows us to get the next question.
 Quiz.prototype.nextQuestion = function(){
     this.counter++;
     console.log('this is the counter: ' + this.counter);
 };
-var correctCounter = 0;
+
+//get the choices of questions from questionList data
+Quiz.prototype.getChoices = function() {
+    var answer = "";
+    for (var i = 0; i < this.questions[this.counter].choices.length; i++) {
+        console.log(this.questions[this.counter].choices[i]);
+        answer += this.questions[this.counter].choices[i];
+    }
+    return answer;
+}
+
+https://bl.ocks.org/shiftyp/0e2516f91a044acfb396
+
 
 Quiz.prototype.checkAnswer = function(userChoice){
-    console.log(correctCounter);
     if(userChoice == this.questions[this.counter].correctAnswer){
-        correctCounter++;
-        console.log(correctCounter);
+        this.numberCorrectAnswer++;
+        console.log('userChoice = ' + userChoice + " vs correct answer: " + this.questions[this.counter].correctAnswer);
+        console.log('# of correct questions: ' + this.numberCorrectAnswer);
+    }else{
+        console.log('userChoice = wrong answer');
+        console.log('userChoice = ' + userChoice + " vs correct answer: " + this.questions[this.counter].correctAnswer);
+        console.log('# of correct questions: ' + this.numberCorrectAnswer);
     }
 };
 
-//View *********
+/*
+
+display the questions
+display the choices 
+
+display the totalnumberCorrect choices 
+display the current question number like 1/5
+
+
+start button : to start the game  start button just at the beginings 
+reset button : to restart the game stays all the time.
+
+a behavior that on click renders te next question
+
+results page that contains : 
+
+title showing results 
+
+
+
+*/
+
+//*************************View **************************
+
+//the parameter will allow us to select where we want to display the data.
+function View(elementSelector, answerSelector) {
+    this.element = $(elementSelector);
+    this.answer = $(answerSelector);
+
+
+}
+
+View.prototype.displayQuestion = function(testQuestion) {
+    this.element.append('<li>' + testQuestion + '</li>');
+
+};
+
+View.prototype.displayUserChoices = function(testChoices){
+    this.answer.append('<li>' + testChoices + '</li>');
+};
+
+//*************************Controller**********************
+
+function Controller(model, view) {
+    this.model = model;
+    this.view = view;
+    //connecting the view display method to the model getQuestion method.
+    this.view.displayQuestion(this.model.getQuestion());
+    this.view.displayUserChoices(this.model.getChoices());
+
+
+    // view.question = model.getQuestion.bind(testQuiz);
+}
+
+
+
+$(document).ready(function(){
+
+
+
+var testQuiz = new Quiz(); 
+var testView = new View('.question', '.answers');
+var controller = new Controller(testQuiz, testView);
+
+
 //add get user choice method
 
-// Quiz.prototype.correctCounter = function(userChoice){
-//     if(Quiz.prototype.checkAnswer(userChoice)){
-//         return correctCounter++;
-//     }
+
 // };
 // Quiz.prototype.displayAnswers = function(questionGroup){
 //     for(var i = 0; i > questionGroup[0][1].length; i++){
@@ -102,13 +178,22 @@ Quiz.prototype.checkAnswer = function(userChoice){
 //     }
 // };
 
-var testQuiz = new Quiz(); 
+testQuiz.getChoices();
 console.log(testQuiz.getQuestion());
+console.log(testQuiz.getChoices());
+testQuiz.getQuestion();
 testQuiz.nextQuestion();
-console.log(testQuiz.getQuestion());
-console.log(testQuiz.checkAnswer(1));
+// console.log(testQuiz.getQuestion());
+console.log(testQuiz.checkAnswer(2));
+testQuiz.checkAnswer(3);
+
+// testView.displayQuestion(testQuiz);
 // console.log(testQuiz.correctCounter(1));
 // console.log(correctCounter);
 //testQuiz.displayQuestions(questionList);
 //console.log(questionList[0].question);
 //testQuiz.displayAnswers(questionList);
+
+
+
+});
