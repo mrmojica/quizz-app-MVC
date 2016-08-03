@@ -80,15 +80,21 @@ Quiz.prototype.nextQuestion = function(){
 
 //get the choices of questions from questionList data
 Quiz.prototype.getChoices = function() {
-    var answer = "";
-    for (var i = 0; i < this.questions[this.counter].choices.length; i++) {
-        console.log(this.questions[this.counter].choices[i]);
-        answer += this.questions[this.counter].choices[i];
-    }
-    return answer;
+    console.log('Array of Choices : ' + this.questions[this.counter].choices);
+   return this.questions[this.counter].choices; 
 }
 
-https://bl.ocks.org/shiftyp/0e2516f91a044acfb396
+
+
+//     // var answer = "";
+//     // for (var i = 0; i < this.questions[this.counter].choices.length; i++) {
+//     //     console.log(this.questions[this.counter].choices[i]);
+//     //     answer += this.questions[this.counter].choices[i];
+//     // }
+//     // return answer;
+
+
+// https://bl.ocks.org/shiftyp/0e2516f91a044acfb396
 
 
 Quiz.prototype.checkAnswer = function(userChoice){
@@ -105,8 +111,8 @@ Quiz.prototype.checkAnswer = function(userChoice){
 
 /*
 
-display the questions
-display the choices 
+DONE! display the questions
+DONE! display the choices 
 
 display the totalnumberCorrect choices 
 display the current question number like 1/5
@@ -131,18 +137,30 @@ title showing results
 function View(elementSelector, answerSelector) {
     this.element = $(elementSelector);
     this.answer = $(answerSelector);
+    // this.answer.on('.user-option', this.function.bind(this)
+
+    
 
 
 }
 
+View.prototype.nextQuestion
+
 View.prototype.displayQuestion = function(testQuestion) {
     this.element.append('<li>' + testQuestion + '</li>');
+    // <li><input class="user-option" type="radio" name="option" value=' + i + '><label>' + questionList[currentQuestionIndex]["choices"][i] + '</label></li>
 
 };
 
-View.prototype.displayUserChoices = function(testChoices){
-    this.answer.append('<li>' + testChoices + '</li>');
+View.prototype.displayUserChoices = function(myArray){
+    //we are grabing the selector value because we had issues appending to this.answer
+    var displayArea = this.answer;
+    myArray.forEach(function(value, index){
+        displayArea.append('<li><input class="user-option" type="radio" name="option" value=' + index + '><label>' + value + '</label></li>');
+    });
 };
+
+
 
 //*************************Controller**********************
 
@@ -178,7 +196,7 @@ var controller = new Controller(testQuiz, testView);
 //     }
 // };
 
-testQuiz.getChoices();
+
 console.log(testQuiz.getQuestion());
 console.log(testQuiz.getChoices());
 testQuiz.getQuestion();
@@ -193,7 +211,6 @@ testQuiz.checkAnswer(3);
 //testQuiz.displayQuestions(questionList);
 //console.log(questionList[0].question);
 //testQuiz.displayAnswers(questionList);
-
-
-
 });
+
+
